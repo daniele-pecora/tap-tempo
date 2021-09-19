@@ -1,7 +1,7 @@
 {
     "name": "Tap tempo",
     "short_name": "Tap tempo",
-    "start_url": ".",
+    "start_url": "./",
     "display": "standalone",
     "background_color": "#fff",
     "description": "Calculate BPM by tapping tempo",
