@@ -229,6 +229,7 @@
             }
 
             const relevantKey = (event) => {
+                return (32 === event.keyCode)// space
                 if (event.altKey
                     || event.ctrlKey
                     || event.key === 'Meta'
@@ -245,6 +246,12 @@
                 return true
             }
 
+            // elBpm.addEventListener('touchstart', (event) => {
+            //     tapUp()
+            // })
+            // elBpm.addEventListener('touchend', (event) => {
+            //     tapDown()
+            // })
             document.body.addEventListener('keyup', (event) => {
                 // count...
                 if (relevantKey(event))
@@ -264,12 +271,7 @@
                 // reset...
                 tapReset()
             })
-            elBpm.addEventListener('touchstart', (event) => {
-                tapUp()
-            })
-            elBpm.addEventListener('touchend', (event) => {
-                tapDown()
-            })
+
             return {
                 updateBpm: updateBpm,
                 tapReset: tapReset,
