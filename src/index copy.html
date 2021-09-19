@@ -1,0 +1,200 @@
+<html>
+
+<head>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyD033wvkEatF4IbM9N2DkJ8TystglcVbf8",
+            authDomain: "tapping-tempo.firebaseapp.com",
+            projectId: "tapping-tempo",
+            storageBucket: "tapping-tempo.appspot.com",
+            messagingSenderId: "744430248266",
+            appId: "1:744430248266:web:85322b2b52696095f621b3",
+            measurementId: "G-92TRWCGTBQ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
+    
+    <style>
+        /* material design */
+        body {
+            font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+            margin: 0;
+        }
+
+        .mat-fab.mat-accent,
+        .mat-flat-button.mat-accent,
+        .mat-mini-fab.mat-accent,
+        .mat-raised-button.mat-accent {
+            background-color: #ff4081;
+        }
+
+        .mat-fab.mat-accent,
+        .mat-fab.mat-primary,
+        .mat-fab.mat-warn,
+        .mat-flat-button.mat-accent,
+        .mat-flat-button.mat-primary,
+        .mat-flat-button.mat-warn,
+        .mat-mini-fab.mat-accent,
+        .mat-mini-fab.mat-primary,
+        .mat-mini-fab.mat-warn,
+        .mat-raised-button.mat-accent,
+        .mat-raised-button.mat-primary,
+        .mat-raised-button.mat-warn {
+            color: #fff;
+        }
+
+        .mat-fab:not([class*=mat-elevation-z]),
+        .mat-mini-fab:not([class*=mat-elevation-z]) {
+            box-shadow: 0 3px 5px -1px rgb(0 0 0 / 20%), 0 6px 10px 0 rgb(0 0 0 / 14%), 0 1px 18px 0 rgb(0 0 0 / 12%);
+        }
+
+        .mat-fab {
+            box-sizing: border-box;
+            position: relative;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: pointer;
+            outline: none;
+            border: none;
+            -webkit-tap-highlight-color: transparent;
+            display: inline-block;
+            white-space: nowrap;
+            text-decoration: none;
+            vertical-align: baseline;
+            text-align: center;
+            margin: 0;
+            min-width: 64px;
+            line-height: 36px;
+            padding: 0 16px;
+            border-radius: 4px;
+            overflow: visible;
+            transform: translate3d(0, 0, 0);
+            transition: background 400ms cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 0;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        /* end - material design */
+
+        .wrapper {
+            text-align: center;
+        }
+
+
+        .bpmButton {
+            font-size: 12em;
+            width: 30rem;
+            height: 30rem;
+            margin: auto;
+            line-height: 0;
+        }
+
+        .bpmButtonText {
+            font-size: 2em;
+        }
+
+        .subtitle {
+            font-style: italic;
+            text-align: center;
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <button id="bpm" class="bpmButtonText bpmButton mat-fab mat-accent">Tap the space bar</button>
+        <div class="subtitle">[SPACE] to tap, [ESC] or 'c' to clear</div>
+        <div class="player">
+            <button>Play</button>
+            <button>Stop</button>
+        </div>
+    </div>
+    <script>
+        const elBpm = document.querySelector('#bpm')
+        const updateBpm = (bpmText) => {
+            elBpm.innerHTML = bpmText
+            if (Number.isInteger(bpmText)) {
+                elBpm.classList.remove('bpmButtonText')
+            } else {
+                elBpm.classList.remove('bpmButtonText')
+                elBpm.classList.add('bpmButtonText')
+            }
+        }
+    </script>
+    <script>
+        let start
+        let bpm
+        const reset = (callback) => {
+            start = undefined
+            bpm = undefined
+            callback('Tap [space]')
+        }
+        const countBpm = (callback) => {
+            if (!start) {
+                start = +new Date()
+                callback('Tap again...')
+            } else {
+                const _start = +new Date()
+                const diff = _start - start
+                bpm = (60 * 1000) / diff
+                console.log(_start, start, diff, bpm)
+                start = _start
+                callback(Math.floor(bpm))
+            }
+        }
+        const init = (callback) => {
+            reset(callback)
+            document.body.addEventListener('keyup', (event) => {
+                console.log(event.keyCode)
+                if (32 === event.keyCode) { // space
+                    countBpm(callback)
+                } else if (27 === event.keyCode /* ESC */ || 67 === event.keyCode  /* 'c' */) {
+                    reset(callback)
+                }
+            })
+            elBpm.addEventListener('mouseup', (event) => {
+                countBpm(callback)
+            })
+        }
+        init(updateBpm)
+    </script>
+</body>
+
+</html>
