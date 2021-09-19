@@ -264,6 +264,12 @@
                 // reset...
                 tapReset()
             })
+            elBpm.addEventListener('touchstart', (event) => {
+                tapUp()
+            })
+            elBpm.addEventListener('touchend', (event) => {
+                tapDown()
+            })
             return {
                 updateBpm: updateBpm,
                 tapReset: tapReset,
