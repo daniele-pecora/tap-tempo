@@ -1,6 +1,10 @@
 {
     "name": "Tap tempo",
     "short_name": "Tap tempo",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "description": "Calculate BPM by tapping tempo",
     "icons": [
         {
             "src": "\/android-icon-36x36.png",
