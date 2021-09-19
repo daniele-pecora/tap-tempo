@@ -72,6 +72,5 @@ node_modules/
 .idea
 .DS_Store
 *.esm.json
-*.js
 *.js.map
 *.log
