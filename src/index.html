@@ -59,7 +59,21 @@
         .mat-flat-button.mat-accent,
         .mat-mini-fab.mat-accent,
         .mat-raised-button.mat-accent {
-            background-color: #ff4081;
+            background-color: #e91e63;
+        }
+
+        .mat-fab.mat-primary,
+        .mat-flat-button.mat-primary,
+        .mat-mini-fab.mat-primary,
+        .mat-raised-button.mat-primary {
+            background-color: #3f51b5;
+        }
+
+        .mat-fab.mat-secondary,
+        .mat-flat-button.mat-secondary,
+        .mat-mini-fab.mat-secondary,
+        .mat-raised-button.mat-secondary {
+            background-color: #9e9e9e;
         }
 
         .mat-fab.mat-accent,
@@ -74,6 +88,13 @@
         .mat-raised-button.mat-accent,
         .mat-raised-button.mat-primary,
         .mat-raised-button.mat-warn {
+            color: #fff;
+        }
+
+        .mat-fab.mat-secondary,
+        .mat-flat-button.mat-secondary,
+        .mat-mini-fab.mat-secondary,
+        .mat-raised-button.mat-secondary {
             color: #fff;
         }
 
@@ -138,27 +159,57 @@
             text-align: center;
             margin: 1em;
         }
+
+        .clearWrapper {
+            /* text-align: center; */
+        }
+
+        .clearWrapperInner {
+            width: 30rem;
+            text-align: left;
+            margin: auto;
+        }
+
+        #clear[disabled] {
+            color: #bbb;
+        }
     </style>
 </head>
 
 <body>
     <div class="wrapper">
-        <button id="bpm" class="bpmButtonText bpmButton mat-fab mat-accent">Tap the space bar</button>
-        <div class="subtitle">[SPACE] to tap, [ESC] or 'c' to clear</div>
-        <div class="player">
+        <button id="bpm" title="Press [space] to tap" class="bpmButtonText bpmButton mat-fab mat-accent"
+            accesskey="t">Tap the space bar</button>
+        <!-- <div class="subtitle">[SPACE] to tap, [ESC] or 'c' to clear</div> -->
+        <!-- <div class="player">
             <button>Play</button>
             <button>Stop</button>
+        </div> -->
+        <div class="clearWrapper">
+            <div class="clearWrapperInner">
+                <button title="[SPACE] to tap, [ESC] or 'c' to clear" id="clear" class="mat-fab mat-secondary"
+                    accesskey="c">clear</button>
+            </div>
         </div>
     </div>
     <script>
+        const elClear = document.querySelector('#clear')
         const elBpm = document.querySelector('#bpm')
         const updateBpm = (bpmText) => {
             elBpm.innerHTML = bpmText
             if (Number.isInteger(bpmText)) {
                 elBpm.classList.remove('bpmButtonText')
+
+                elClear.classList.remove('mat-secondary')
+                elClear.classList.add('mat-primary')
+                elClear.removeAttribute('disabled')
             } else {
                 elBpm.classList.remove('bpmButtonText')
                 elBpm.classList.add('bpmButtonText')
+
+                elClear.classList.add('mat-secondary')
+                elClear.classList.remove('mat-primary')
+                elClear.setAttribute('disabled', 'disabled')
             }
         }
     </script>
@@ -195,6 +246,9 @@
             })
             elBpm.addEventListener('mouseup', (event) => {
                 countBpm(callback)
+            })
+            elClear.addEventListener('click', (event) => {
+                reset(callback)
             })
         }
         init(updateBpm)
