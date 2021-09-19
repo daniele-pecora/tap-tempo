@@ -150,6 +150,13 @@
             line-height: 0;
         }
 
+        /* note: 100% is baseline so 85% is slightly darker, 
+   20% would be significantly darker */
+        .bpmButtonPressed {
+            background-color: red !important;
+            --filter: brightness(85%);
+        }
+
         .bpmButtonText {
             font-size: 2em;
         }
@@ -193,65 +200,116 @@
         </div>
     </div>
     <script>
-        const elClear = document.querySelector('#clear')
-        const elBpm = document.querySelector('#bpm')
-        const updateBpm = (bpmText) => {
-            elBpm.innerHTML = bpmText
-            if (Number.isInteger(bpmText)) {
-                elBpm.classList.remove('bpmButtonText')
-
-                elClear.classList.remove('mat-secondary')
-                elClear.classList.add('mat-primary')
-                elClear.removeAttribute('disabled')
-            } else {
-                elBpm.classList.remove('bpmButtonText')
-                elBpm.classList.add('bpmButtonText')
-
-                elClear.classList.add('mat-secondary')
-                elClear.classList.remove('mat-primary')
-                elClear.setAttribute('disabled', 'disabled')
+        const ui = (() => {
+            const elClear = document.querySelector('#clear')
+            const elBpm = document.querySelector('#bpm')
+            const updateBpm = (bpmText) => {
+                elBpm.innerHTML = bpmText
+                if (Number.isInteger(bpmText)) {
+                    elBpm.classList.remove('bpmButtonText')
+                    elClear.classList.remove('mat-secondary')
+                    elClear.classList.add('mat-primary')
+                    elClear.removeAttribute('disabled')
+                } else {
+                    elBpm.classList.remove('bpmButtonText')
+                    elBpm.classList.add('bpmButtonText')
+                    elClear.classList.add('mat-secondary')
+                    elClear.classList.remove('mat-primary')
+                    elClear.setAttribute('disabled', 'disabled')
+                }
             }
-        }
+            const tapDown = () => {
+                elBpm.classList.add('bpmButtonPressed')
+            }
+            const tapUp = () => {
+                elBpm.classList.remove('bpmButtonPressed')
+            }
+            const tapReset = () => {
+                updateBpm('Tap [space]')
+            }
+
+            const relevantKey = (event) => {
+                if (event.altKey
+                    || event.ctrlKey
+                    || event.key === 'Meta'
+                    || event.key === 'Shift'
+                    || event.key === 'CapsLock'
+                    || event.key === 'Tab'
+                    || event.key === 'Enter'
+                    || event.key === 'ArrowUp'
+                    || event.key === 'ArrowDown'
+                    || event.key === 'ArrowLeft'
+                    || event.key === 'ArrowRight'
+                )
+                    return false
+                return true
+            }
+
+            document.body.addEventListener('keyup', (event) => {
+                // count...
+                if (relevantKey(event))
+                    tapUp()
+            })
+            document.body.addEventListener('keydown', (event) => {
+                if (relevantKey(event))
+                    tapDown()
+            })
+            elBpm.addEventListener('mouseup', (event) => {
+                tapUp()
+            })
+            elBpm.addEventListener('mousedown', (event) => {
+                tapDown()
+            })
+            elClear.addEventListener('click', (event) => {
+                // reset...
+                tapReset()
+            })
+            return {
+                updateBpm: updateBpm,
+                tapReset: tapReset,
+                elBpm: elBpm,
+                elClear: elClear
+            }
+        })()
     </script>
     <script>
         let start
         let bpm
-        const reset = (callback) => {
+        const resetBpm = () => {
             start = undefined
             bpm = undefined
-            callback('Tap [space]')
         }
-        const countBpm = (callback) => {
+        const countBpm = () => {
             if (!start) {
                 start = +new Date()
-                callback('Tap again...')
+                return 'Tap again...'
             } else {
                 const _start = +new Date()
                 const diff = _start - start
                 bpm = (60 * 1000) / diff
-                console.log(_start, start, diff, bpm)
                 start = _start
-                callback(Math.floor(bpm))
+                return Math.floor(bpm)
             }
         }
-        const init = (callback) => {
-            reset(callback)
+
+        const init = () => {
+            resetBpm()
             document.body.addEventListener('keyup', (event) => {
-                console.log(event.keyCode)
+                //console.log(event.keyCode)
                 if (32 === event.keyCode) { // space
-                    countBpm(callback)
+                    ui.updateBpm(countBpm())
                 } else if (27 === event.keyCode /* ESC */ || 67 === event.keyCode  /* 'c' */) {
-                    reset(callback)
+                    resetBpm()
                 }
             })
-            elBpm.addEventListener('mouseup', (event) => {
-                countBpm(callback)
+            ui.elBpm.addEventListener('mouseup', (event) => {
+                ui.updateBpm(countBpm())
             })
-            elClear.addEventListener('click', (event) => {
-                reset(callback)
+            ui.elClear.addEventListener('click', (event) => {
+                resetBpm()
             })
         }
-        init(updateBpm)
+        init()
     </script>
     <script>
         if ('serviceWorker' in navigator) {
