@@ -1,7 +1,7 @@
 {
   "name": "tap-tempo",
   "version": "1.0.0",
-  "description": "Tapping tempo",
+  "description": "Calculate BPM by tapping tempo",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
