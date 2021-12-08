@@ -2,7 +2,7 @@
 Calculate BPM by tapping to the song
 
 
-A simple tap tempo app ;-)
+A simple tap tempo app, since Logic Pro X is missing such a one click tap tempo app ;-)
 
 
 [Demo App Online](https://tapping-tempo.web.app/)
